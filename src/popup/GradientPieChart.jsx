@@ -6,33 +6,41 @@ const GradientPieChart = ({ data }) => {
   const gradients = (
     <defs>
       <linearGradient id="gradient1" gradientTransform="rotate(90)">
-        <stop offset="0%" stopColor="green" />
-        <stop offset="100%" stopColor="yellow" />
+        <stop offset="0%" stopColor="#82ca26" />
+        <stop offset="100%" stopColor="#82ca26" />
       </linearGradient>
 
       <linearGradient id="gradient2" gradientTransform="rotate(90)">
-        <stop offset="0%" stopColor="blue" />
-        <stop offset="100%" stopColor="purple" />
+        <stop offset="0%" stopColor="#1fa5ff" />
+        <stop offset="100%" stopColor="#1fa5ff" />
       </linearGradient>
       <linearGradient id="gradient3" gradientTransform="rotate(90)">
-        <stop offset="0%" stopColor="red" />
-        <stop offset="100%" stopColor="orange" />
+        <stop offset="0%" stopColor="#d55438" />
+        <stop offset="100%" stopColor="#d55438" />
       </linearGradient>
     </defs>
   )
 
   return (
-    <div>
-      <svg>
+    <div style={{ height: '200px', width: '200px' }}>
+      <svg
+        style={{
+          height: '200px',
+          width: '200px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         {gradients}
         <PieChart
           data={data}
-          label={({ dataEntry }) => dataEntry.value}
-          labelStyle={{
-            fontSize: '5px',
-            fontFamily: 'sans-serif',
-            fill: '#fff',
-          }}
+          // label={({ dataEntry }) => dataEntry.value}
+          // labelStyle={{
+          //   fontSize: '5px',
+          //   fontFamily: 'sans-serif',
+          //   fill: '#fff',
+          // }}
           radius={42}
           lineWidth={50}
           paddingAngle={5}
