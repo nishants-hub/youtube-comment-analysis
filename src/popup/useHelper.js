@@ -65,8 +65,26 @@ const useHelper = () => {
       }
     })
     const res = await Promise.all(promises)
-    const filtered = res.filter((item) => item)
-    return filtered.map((video) => ({ ...video, analysis: getAnalysis(video.comments) }))
+    const filtered = res.filter((item) => item && item.comments && item.comments.length > 0)
+    const output = filtered.map((video) => ({ ...video, analysis: getAnalysis(video.comments) }))
+    const finaloutput = output.map((item) => ({
+      ...item,
+      percentage: {
+        positive:
+          (item.analysis.positive /
+            (item.analysis.positive + item.analysis.neutral + item.analysis.negative)) *
+          100,
+        neutral:
+          (item.analysis.neutral /
+            (item.analysis.positive + item.analysis.neutral + item.analysis.negative)) *
+          100,
+        negative:
+          (item.analysis.negative /
+            (item.analysis.positive + item.analysis.neutral + item.analysis.negative)) *
+          100,
+      },
+    }))
+    return finaloutput.sort((a, b) => b.percentage.positive - a.percentage.positive)
   }
 
   return { fetchComments }
