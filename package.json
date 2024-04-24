@@ -25,6 +25,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-loader-spinner": "^6.1.6",
     "react-minimal-pie-chart": "^8.4.0",
     "vader-sentiment": "^1.1.3"
   },
