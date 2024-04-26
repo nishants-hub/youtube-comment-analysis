@@ -1,0 +1,18 @@
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 120px;
+}
+
+.legendlabel {
+  color: #fff;
+  font-size: 14px;
+}
+
+.colorbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #fff;
+}

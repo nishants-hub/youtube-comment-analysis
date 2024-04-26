@@ -1,48 +1,30 @@
-@media (prefers-color-scheme: light) {
-  a:hover {
-    color: #61dafb;
-  }
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 main {
   text-align: center;
   padding: 1em;
   margin: 0 auto;
+  height: 550px;
+  width: 750px;
+  background-color: #121212;
+  overflow: scroll;
+}
+
+main,
+.analysisbutton {
+  font-family: 'Poppins', sans-serif !important;
 }
 
 h3 {
   color: #61dafb;
   text-transform: uppercase;
   font-size: 1.5rem;
-  font-weight: 200;
+  font-weight: 400;
   line-height: 1.2rem;
-  margin: 2rem auto;
-}
-
-.calc {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 2rem;
-
-  & > button {
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid #61dafb;
-    border-radius: 0.25rem;
-    background-color: transparent;
-    color: #61dafb;
-    cursor: pointer;
-    outline: none;
-
-    width: 3rem;
-    margin: 0 a;
-  }
-
-  & > label {
-    font-size: 1.5rem;
-    margin: 0 1rem;
-  }
+  position: sticky;
+  top: -1em;
+  background-color: #121212;
+  padding: 2rem;
 }
 
 a {
@@ -50,4 +32,135 @@ a {
   margin: 0.5rem;
   color: #cccccc;
   text-decoration: none;
+}
+
+.videoImage {
+  height: 160px;
+  width: 200px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+img {
+  height: 100%;
+  width: 100%;
+  border-radius: 16px;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #fff;
+}
+
+.analysisbutton {
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  transition: background-color 0.3s;
+  background-color: #8e52f9;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.downloadBtContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.downloadbutton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+  transition: background-color 0.3s;
+  background-color: #0abb92;
+  font-family: 'Poppins', sans-serif !important;
+  margin-bottom: 10px;
+}
+
+.title {
+  min-height: 80px;
+  max-height: 80px;
+  overflow: hidden;
+}
+
+.legendContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.tag {
+  background-color: #8e52f9;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.waitmsg {
+  color: #fff;
+  font-size: 16px;
+}
+
+/* Scrollbar Styles --------------------------------------------------*/
+
+body::-webkit-scrollbar {
+  height: 1em;
+  width: 1em;
+}
+
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+div::-webkit-scrollbar {
+  height: 0.6rem;
+  width: 0.6rem;
+}
+
+div::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+div::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+  border-radius: 6px;
+}
+
+textarea::-webkit-scrollbar {
+  height: 0.6rem;
+  width: 0.6rem;
+}
+
+textarea::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+  border-radius: 6px;
 }
