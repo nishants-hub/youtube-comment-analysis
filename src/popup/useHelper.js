@@ -3,11 +3,13 @@ import vader from 'vader-sentiment'
 
 const useHelper = () => {
   const apiKey = 'AIzaSyAf15KLtQI6qgZE9h4bvg2scRoQzh4bXOE'
+  const maxResults = 100
 
+  // comments fetch for each video
   async function fetchCommentsHelper(videoId) {
     try {
       const response = await fetch(
-        `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&key=${apiKey}`,
+        `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&key=${apiKey}&maxResults=${maxResults}`,
       )
       const data = await response.json()
       return data
@@ -17,9 +19,9 @@ const useHelper = () => {
   }
 
   const getCategory = (compound) => {
-    if (compound >= 0.5) {
+    if (compound >= 0.05) {
       return 'positive'
-    } else if (compound > -0.5) {
+    } else if (compound > -0.05) {
       return 'neutral'
     } else {
       return 'negative'
@@ -65,7 +67,7 @@ const useHelper = () => {
       }
     })
     const res = await Promise.all(promises)
-    const filtered = res.filter((item) => item && item.comments && item.comments.length > 0)
+    const filtered = res.filter((item) => item && item.comments && item.comments.length > 50)
     const output = filtered.map((video) => ({ ...video, analysis: getAnalysis(video.comments) }))
     const finaloutput = output.map((item) => ({
       ...item,
@@ -84,7 +86,12 @@ const useHelper = () => {
           100,
       },
     }))
-    return finaloutput.sort((a, b) => b.percentage.positive - a.percentage.positive)
+    return finaloutput.sort(
+      (a, b) =>
+        b.percentage.positive -
+        b.percentage.negative -
+        (a.percentage.positive - a.percentage.negative),
+    )
   }
 
   return { fetchComments }
