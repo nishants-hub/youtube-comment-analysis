@@ -1,8 +1,8 @@
 import './Popup.css'
 
-import { PieChart, pieChartDefaultProps } from 'react-minimal-pie-chart'
 import { useEffect, useState } from 'react'
 
+import { FaDownload } from 'react-icons/fa'
 import GradientPieChart from './GradientPieChart'
 import Legend from './Legend'
 import { Vortex } from 'react-loader-spinner'
@@ -60,9 +60,59 @@ export const Popup = () => {
     window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank')
   }
 
+  function removeNonAlphanumeric(sentence) {
+    // Use a regular expression to remove non-alphabetical and non-numerical characters
+    return sentence.replace(/[^a-zA-Z0-9 ]/g, '')
+  }
+
+  const getJSONData = (index) => {
+    let vidData = analysedVideos[index]
+    let videoDataCSV = vidData?.comments?.map((item) => ({
+      comment: removeNonAlphanumeric(item.text),
+      category: item.category,
+      positiveScore: item.intensity.pos,
+      neutralScore: item.intensity.neu,
+      negativeScore: item.intensity.neg,
+      compoundScore: item.intensity.compound,
+    }))
+
+    videoDataCSV = videoDataCSV?.filter((item) =>
+      ['neutral', 'positive', 'negative'].includes(item?.category),
+    )
+
+    console.log('csv', videoDataCSV)
+    return videoDataCSV
+  }
+
+  const convertJsonToCsv = (index) => {
+    // Convert JSON to CSV
+    const csv = convertArrayToCSV(getJSONData(index))
+
+    // Create a Blob containing the CSV data
+    const blob = new Blob([csv], { type: 'text/csv' })
+
+    // Create a download link
+    const downloadLink = document.createElement('a')
+    downloadLink.href = URL.createObjectURL(blob)
+    downloadLink.download = 'data.csv'
+    downloadLink.click()
+  }
+
+  const convertArrayToCSV = (array) => {
+    const header = Object.keys(array[0]).join(',') + '\n'
+
+    const body = array
+      .map((obj) => {
+        return Object.values(obj).join(',')
+      })
+      .join('\n')
+
+    return header + body
+  }
+
   return (
     <main>
-      <h3>VIDEO INSIGHTS USING COMMENT ANALYSIS</h3>
+      <h3>VIDEO INSIGHTS THROUGH COMMENT ANALYSIS</h3>
 
       {analysedVideos.length === 0 && !isPending && (
         <>
@@ -79,7 +129,7 @@ export const Popup = () => {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              maxWidth: '400px',
+              maxWidth: '420px',
               textAlign: 'center',
               margin: 'auto',
               marginTop: '80px',
@@ -92,12 +142,12 @@ export const Popup = () => {
               This extension is a part of our major project titled:
               <br></br>
               <span style={{ color: 'violet', textTransform: 'uppercase', fontSize: '18px' }}>
-                Video Insights using comment analysis
+                Video Insights through comment analysis
               </span>
             </p>
             <p>Created by:</p>
-            <p style={{ fontSize: '16px', marginTop: '4px' }}>Nishant Singh</p>
-            <p style={{ fontSize: '16px' }}>Rishu Tiwari</p>
+            <p style={{ fontSize: '16px', marginTop: '4px' }}>Rishu Tiwari</p>
+            <p style={{ fontSize: '16px' }}>Nishant Singh</p>
             <p style={{ fontSize: '16px' }}>Akash Rai</p>
           </div>
         </>
@@ -200,6 +250,12 @@ export const Popup = () => {
                       title={'Negative'}
                       percentage={item.percentage.negative}
                     />
+                  </div>
+                  <div className="downloadBtContainer">
+                    <button className="downloadbutton" onClick={() => convertJsonToCsv(index)}>
+                      <FaDownload size={'16px'} />
+                      <span>Download Report</span>
+                    </button>
                   </div>
                 </div>
               </div>

@@ -21,7 +21,10 @@ h3 {
   font-size: 1.5rem;
   font-weight: 400;
   line-height: 1.2rem;
-  margin: 2rem auto;
+  position: sticky;
+  top: -1em;
+  background-color: #121212;
+  padding: 2rem;
 }
 
 a {
@@ -64,6 +67,31 @@ img {
   transition: background-color 0.3s;
   background-color: #8e52f9;
   font-family: 'Poppins', sans-serif !important;
+}
+
+.downloadBtContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.downloadbutton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+  transition: background-color 0.3s;
+  background-color: #0abb92;
+  font-family: 'Poppins', sans-serif !important;
+  margin-bottom: 10px;
 }
 
 .title {
