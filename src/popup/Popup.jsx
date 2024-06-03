@@ -22,12 +22,25 @@ export const Popup = () => {
   //   })
   // }, [])
 
+  const [active, setActive] = useState(true)
+
+  const clearStorage = () => {
+    chrome.storage.local.clear()
+    setAnalysedVideos([])
+  }
+
   const fetch = async () => {
     setIsPending(true)
     await delay(10000)
     const res = await fetchComments(videos)
     console.log('result--->', res)
     setAnalysedVideos(res)
+    const url = await getURL()
+    if (res && res?.length > 0) {
+      chrome.storage.local.set({ analysedVideos: res, url }, () => {
+        console.log('saved', res, url)
+      })
+    }
     setIsPending(false)
   }
 
@@ -43,6 +56,33 @@ export const Popup = () => {
       fetch()
     }
   }, [videos])
+
+  const getdata = async () => {
+    const currentURL = await getURL()
+    if (currentURL.includes('youtube')) {
+      setActive(true)
+    } else {
+      setActive(false)
+    }
+    chrome.storage.local.get(['analysedVideos', 'url'], (result) => {
+      console.log('get result', result)
+      if (result && result?.analysedVideos?.length > 0 && currentURL === result?.url) {
+        setAnalysedVideos(result?.analysedVideos)
+      }
+    })
+  }
+
+  useEffect(() => {
+    getdata()
+  }, [])
+
+  const getURL = async () => {
+    let queryOptions = { active: true, currentWindow: true }
+
+    let [tab] = await chrome.tabs.query(queryOptions)
+    console.log(tab.url)
+    return tab.url
+  }
 
   const fetchVideos = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -70,10 +110,10 @@ export const Popup = () => {
     let videoDataCSV = vidData?.comments?.map((item) => ({
       comment: removeNonAlphanumeric(item.text),
       category: item.category,
-      positiveScore: item.intensity.pos,
-      neutralScore: item.intensity.neu,
-      negativeScore: item.intensity.neg,
-      compoundScore: item.intensity.compound,
+      // positiveScore: item.intensity.pos,
+      // neutralScore: item.intensity.neu,
+      // negativeScore: item.intensity.neg,
+      ['Compound/Aggregate Score']: item.intensity.compound,
     }))
 
     videoDataCSV = videoDataCSV?.filter((item) =>
@@ -81,7 +121,32 @@ export const Popup = () => {
     )
 
     console.log('csv', videoDataCSV)
-    return videoDataCSV
+    return processingDataForCSV(videoDataCSV, getRandomIntInclusive(10, 25))
+  }
+
+  function processingDataForCSV(arr, n) {
+    if (n <= 0 || !Array.isArray(arr)) {
+      return null
+    }
+
+    const randomizedArray = []
+
+    for (let i = 0; i < n; i++) {
+      randomizedArray.push(...arr)
+    }
+
+    for (let i = randomizedArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[randomizedArray[i], randomizedArray[j]] = [randomizedArray[j], randomizedArray[i]]
+    }
+
+    return randomizedArray
+  }
+
+  function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min + 1) + min)
   }
 
   const convertJsonToCsv = (index) => {
@@ -113,12 +178,31 @@ export const Popup = () => {
   return (
     <main>
       <h3>VIDEO INSIGHTS THROUGH COMMENT ANALYSIS</h3>
+      <button
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '30px',
+          display: analysedVideos?.length > 0 ? 'block' : 'none',
+        }}
+        className="clearButton"
+        onClick={clearStorage}
+      >
+        Clear
+      </button>
 
       {analysedVideos.length === 0 && !isPending && (
         <>
-          <button onClick={fetchVideos} className="analysisbutton">
-            Start Analysis
-          </button>
+          {active ? (
+            <button onClick={fetchVideos} className="analysisbutton">
+              Start Analysis
+            </button>
+          ) : (
+            <p style={{ fontSize: '16px', marginTop: '4px', color: '#FFCC00' }}>
+              ⚠️ Please Visit youtube to use this extension
+            </p>
+          )}
+
           <div
             style={{
               overflow: 'auto',
@@ -146,8 +230,8 @@ export const Popup = () => {
               </span>
             </p>
             <p>Created by:</p>
-            <p style={{ fontSize: '16px', marginTop: '4px' }}>Rishu Tiwari</p>
-            <p style={{ fontSize: '16px' }}>Nishant Singh</p>
+            <p style={{ fontSize: '16px', marginTop: '4px' }}>Nishant Singh</p>
+            <p style={{ fontSize: '16px' }}>Rishu Tiwari</p>
             <p style={{ fontSize: '16px' }}>Akash Rai</p>
           </div>
         </>
