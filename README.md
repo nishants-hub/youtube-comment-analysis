@@ -26,6 +26,14 @@ $ cd my-crx-app
 $ npm run dev
 ```
 
+## Environment Variables: 
+
+Add youtube api key in env
+
+```
+REACT_APP_YOUTUBE_API_KEY="youtube api key"
+```
+
 ### Chrome Extension Developer Mode
 
 1. set your Chrome browser 'Developer mode' up
